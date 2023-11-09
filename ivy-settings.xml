@@ -1,0 +1,15 @@
+<ivysettings>
+    <settings defaultResolver="ibiblio"/>
+    <resolvers>
+        <chain name="ibiblio">
+            <ibiblio name="ibiblio" m2compatible="true"/>
+            <ibiblio name="scala-tools" m2compatible="true"/>
+            <ibiblio name="conjars" m2compatible="true"/>
+            <ibiblio name="java.net2" m2compatible="true"/>
+        </chain>
+    </resolvers>
+    <modules>
+        <module organisation="org.scala-lang" name="scala-library" revision="2.12.15"/>
+        <!-- Add any other required modules -->
+    </modules>
+</ivysettings>
