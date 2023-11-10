@@ -18,19 +18,20 @@ schema = StructType([
     StructField("rating", FloatType(), True)
 ])
 
-df = spark.read.csv('../ml-latest/ratings-small.csv', header=True, schema=schema)
+df = spark.read.csv('../ml-latest/ratings.csv', header=True, schema=schema)
 
-als = ALS(maxIter=5, regParam=0.01, userCol="userId", itemCol="movieId", ratingCol="rating", coldStartStrategy="drop")
-model = als.fit(df)
+(training, test) = df.randomSplit([0.8, 0.2])
+als = ALS(maxIter=5, regParam=0.09, userCol="userId", rank=25, itemCol="movieId", ratingCol="rating", coldStartStrategy="drop", nonnegative=True)
+model = als.fit(training)
 #model.save("engine")
 
-#predictions = model.transform(df)
-#evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating", predictionCol="prediction")
-#rmse = evaluator.evaluate(predictions)
-#print(f"Root-mean-square error = {rmse}")
+predictions = model.transform(test)
+evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating", predictionCol="prediction")
+rmse = evaluator.evaluate(predictions)
+print(f"Root-mean-square error = {rmse}")
 
-movieRecs = model.recommendForAllUsers(5)
+#movieRecs = model.recommendForAllUsers(5)
 
-movieRecs.show(truncate=False)
+#movieRecs.show(truncate=False)
 
 spark.stop()

@@ -27,8 +27,8 @@ class MovieRecommendationSystem:
     def load_data(self, file_path):
         return self.spark.read.csv(file_path, header=True, schema=self.schema)
 
-    def train_model(self, data_frame, max_iter=10, reg_param=0.01, user_col="userId", item_col="movieId", rating_col="rating", cold_start_strategy="drop"):
-        als = ALS(maxIter=max_iter, regParam=reg_param, userCol=user_col, itemCol=item_col, ratingCol=rating_col, coldStartStrategy=cold_start_strategy)
+    def train_model(self, data_frame, max_iter=5, reg_param=0.09, user_col="userId", item_col="movieId", rating_col="rating", cold_start_strategy="drop", rank=25, nonnegative=True):
+        als = ALS(maxIter=max_iter, regParam=reg_param, userCol=user_col, itemCol=item_col, ratingCol=rating_col, coldStartStrategy=cold_start_strategy, rank=rank, nonnegative=nonnegative)
         model = als.fit(data_frame)
         return model
 
